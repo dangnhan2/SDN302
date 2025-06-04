@@ -5,7 +5,7 @@ export const GetAll = () => {
 }
 
 export const DeleteProduct = (id :String) => {
-    return axios.delete(`/api/products/${id}`)
+    return axios.delete(`/api/products/${id}?id=${id}`)
 }
 
 export const AddProduct = (name: String, description: String, price: Number, image: String) => {
@@ -13,7 +13,7 @@ export const AddProduct = (name: String, description: String, price: Number, ima
 }
 
 export const UpdateProduct = (id: String, name: String, description: String, price: Number, image: String) => {
-    return axios.put(`/api/products/${id}`, {name, description, price, image});
+    return axios.put(`/api/products/${id}?id=${id}`, {name, description, price, image});
 }
 
 export const UploadImage = (file: File) => {
