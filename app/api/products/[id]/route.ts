@@ -2,12 +2,13 @@ import { connectMongo } from "@/lib/db";
 import product from "@/app/schema/product";
 import {  NextRequest,NextResponse } from 'next/server';
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest) {
   await connectMongo();
 
   const data = await req.json();
+  const id = req.nextUrl.pathname.split('/').pop();
 
-  const updated = await product.findByIdAndUpdate(params.id, data, { new: true });
+  const updated = await product.findByIdAndUpdate(id, data, { new: true });
 
   if (!updated) {
     return NextResponse.json({ error: 'Product not found' }, { status: 404 });
@@ -16,10 +17,14 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   return NextResponse.json(updated);
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest) {
   await connectMongo();
+  const id = req.nextUrl.pathname.split('/').pop();
 
-  const deleted = await product.findByIdAndDelete(params.id);
+  if (!id) {
+    return NextResponse.json({ error: "Missing ID" }, { status: 400 });
+  }
+  const deleted = await product.findByIdAndDelete(id);
 
   if (!deleted) {
     return NextResponse.json({ error: 'Product not found' }, { status: 404 });
