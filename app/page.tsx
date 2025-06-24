@@ -3,7 +3,7 @@
 import {ChangeEvent, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { AddProduct, DeleteProduct, GetAll, UpdateProduct, UploadImage } from './api/axios/apis';
-
+import { useCart } from '@/lib/useCart';
 interface Product {
   _id: string;
   name: string;
@@ -16,7 +16,7 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-
+  const { addToCart } = useCart();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
@@ -177,6 +177,19 @@ export default function Home() {
                     className="text-red-600 hover:text-red-900 bg-red-50 px-3 py-1 rounded-md"
                   >
                     Delete
+                  </button>
+                  <button
+                    onClick={() =>
+                         addToCart({
+                          productId: product._id,
+                          name: product.name,
+                          price: product.price,
+                          quantity: 1,
+                          imageUrl: product.image || '/placeholder.png',
+                      })}
+                    className="text-green-600 hover:text-red-900 bg-red-50 px-3 py-1 rounded-md"
+                  >
+                    Add to cart
                   </button>
                 </td>
               </tr>
